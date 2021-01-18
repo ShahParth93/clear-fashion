@@ -34,7 +34,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // I can find on these e-shops
 // 2. Log the variable
 
-
+var link_cheapest_tshirt = 'https://www.loom.fr/collections/tous-les-vetements/products/le-t-shirt';
+console.log(link_cheapest_tshirt);
 
 
 
@@ -51,11 +52,18 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
 
+var NbProducts = marketplace.length;
+console.log(NbProducts);
+
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
 // 2. Log the variable
 // 3. Log how many brands we have
+const listbrands = [];
+marketplace.forEach(element => listbrands.push(element.brand));
+console.log(listbrands);
+console.log(listbrands.length);
 
 
 // 🎯 TODO: Sort by price
