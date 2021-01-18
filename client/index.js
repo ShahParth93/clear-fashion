@@ -112,7 +112,7 @@ function comparedate(a,b){
     return comparison;
 }
 var sortbydate = marketplace.sort(comparedate);
-
+sortbydate.reverse();
 const listbrandsdate = [];
 sortbydate.forEach(element => listbrandsdate.push(element));
 console.log(listbrandsdate);
@@ -142,7 +142,7 @@ for (var i = 0; i < marketplace.length; i++) {
   s=s+marketplace[i].price;
 }
 var avgBasket = s/marketplace.length;
-console.log(avgBasket);
+console.log(Math.round(avgBasket));
 
 
 
