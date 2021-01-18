@@ -300,6 +300,19 @@ const COTELE_PARIS = [
 // 🎯 TODO: New released products
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+today = yyyy+'-'+mm+'-'+dd;
+
+var d = Date.parse(today);
+
+var w2 = (14*24*60*60*1000);//two weeks in miliseconds
+
+const newproduct = (element) => d - Date.parse(element.released) < w2;
+console.log(COTELE_PARIS.some(newproduct)); //at least one new product
+
 
 
 // 🎯 TODO: Reasonable price
@@ -361,8 +374,9 @@ blueJacket = {
 };
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
-
-
+jacket = Object.assign({}, blueJacket, { favorite: true });
+console.log(jacket);
+console.log(blueJacket);
 
 
 
@@ -375,3 +389,5 @@ blueJacket = {
 // 🎯 TODO: Save in localStorage
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
+localStorage.setItem("MY_FAVORITE_BRANDS", MY_FAVORITE_BRANDS);
+console.log(localStorage);
