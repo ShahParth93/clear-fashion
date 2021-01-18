@@ -205,6 +205,28 @@ for(var elt in marketplace){
 
 
 
+function brandPercentile(b){
+  var prices = [];
+  for(var i=0; i < marketplace.length;i++){
+    if(marketplace[i].brand == b){
+      prices.push(marketplace[i].price);
+    }
+  }
+  //console.log(prices);
+  var pricessorted = prices.sort(function(a,b){ return a-b;});
+  //console.log(pricessorted);
+  var position = ((pricessorted.length) - 1) * 0.9;
+  var base = Math.floor(position); //Rounding up to the nearest whole number
+  var rest = position - base;
+
+  if (base+1 >= pricessorted.length){
+    return pricessorted[base];
+  }
+  else{
+    return pricessorted[base]*(1-(position%1))+pricessorted[base+1]*(position%1);
+  } 
+}
+uniquebrands.forEach(element => console.log(element+ ': '+brandPercentile(element)) );
 
 
 /**
