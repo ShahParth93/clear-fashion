@@ -63,13 +63,38 @@ console.log(NbProducts);
 const listbrands = [];
 marketplace.forEach(element => listbrands.push(element.brand));
 console.log(listbrands);
-console.log(listbrands.length);
+
+const uniquebrands = [...new Set(listbrands)];
+///... allows to transorm the set back into an array 
+console.log(uniquebrands);
+
+
+//const brandlist = marketplace.map(product => product.brand);
+//map returns an array from an array
 
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
+function compareprice(a,b){
+    let comparison = 0;
+    if (a.price > b.price) {
+      comparison = 1;
+    } else if (a.price < b.price) {
+      comparison = -1;
+    }
+    return comparison;
+}
+var sortbyprice = marketplace.sort(compareprice);
+
+const listbrandsprice = [];
+sortbyprice.forEach(element => listbrandsprice.push(element.brand));
+console.log(listbrandsprice);
+
+
+
+
 
 
 // 🎯 TODO: Sort by date
@@ -77,15 +102,50 @@ console.log(listbrands.length);
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
 
+function comparedate(a,b){
+    let comparison = 0;
+    if (a.date > b.date) {
+      comparison = 1;
+    } else if (a.date < b.date) {
+      comparison = -1;
+    }
+    return comparison;
+}
+var sortbydate = marketplace.sort(comparedate);
+
+const listbrandsdate = [];
+sortbydate.forEach(element => listbrandsdate.push(element.brand));
+console.log(listbrandsdate);
+
+
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
 
+const listbrands50n100 = [];
+//marketplace.forEach(element => if((element.price >=50) && (element.price <=100)){
+//                                  listbrands50n100.push(element.brand);
+//                                });
+for (var i = 0; i < marketplace.length; i++) {
+  if((marketplace[i].price >=50)&&(marketplace[i].price<=100)){
+    listbrands50n100.push(marketplace[i]);
+  }
+}
+
+console.log(listbrands50n100);
+
+
 
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
+var s =0;
+for (var i = 0; i < marketplace.length; i++) {
+  s=s+marketplace[i].price;
+}
+var avgBasket = s/marketplace.length;
+console.log(avgBasket);
 
 
 
