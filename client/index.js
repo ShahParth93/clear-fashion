@@ -306,15 +306,33 @@ const COTELE_PARIS = [
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
 
+const reasonableprice = (element) => element.price < 100;
+console.log(COTELE_PARIS.every(reasonableprice));
+
+
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
+for(var i=0;i<COTELE_PARIS.length;i++){
+  if(COTELE_PARIS[i].uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131'){
+    console.log(COTELE_PARIS[i]);
+  }
+}
 
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+for(var i=0;i<COTELE_PARIS.length;i++){
+  if(COTELE_PARIS[i].uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131'){
+    const index = COTELE_PARIS.indexOf(COTELE_PARIS[i]);
+    if (index > -1) {
+      COTELE_PARIS.splice(index, 1);
+    }
+  }
+}
+console.log(COTELE_PARIS);
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
@@ -330,6 +348,11 @@ jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
 // 2. What do you notice?
+
+console.log(blueJacket);
+console.log(jacket);
+
+//blueJacket also has the property 'favorite' set to true
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
