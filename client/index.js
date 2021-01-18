@@ -89,7 +89,7 @@ function compareprice(a,b){
 var sortbyprice = marketplace.sort(compareprice);
 
 const listbrandsprice = [];
-sortbyprice.forEach(element => listbrandsprice.push(element.brand));
+sortbyprice.forEach(element => listbrandsprice.push(element));
 console.log(listbrandsprice);
 
 
@@ -114,7 +114,7 @@ function comparedate(a,b){
 var sortbydate = marketplace.sort(comparedate);
 
 const listbrandsdate = [];
-sortbydate.forEach(element => listbrandsdate.push(element.brand));
+sortbydate.forEach(element => listbrandsdate.push(element));
 console.log(listbrandsdate);
 
 
@@ -124,9 +124,6 @@ console.log(listbrandsdate);
 // 2. Log the list
 
 const listbrands50n100 = [];
-//marketplace.forEach(element => if((element.price >=50) && (element.price <=100)){
-//                                  listbrands50n100.push(element.brand);
-//                                });
 for (var i = 0; i < marketplace.length; i++) {
   if((marketplace[i].price >=50)&&(marketplace[i].price<=100)){
     listbrands50n100.push(marketplace[i]);
@@ -173,8 +170,15 @@ console.log(avgBasket);
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
-
-
+const brands ={};
+for(var elt in marketplace){
+  for(var brand in uniquebrands){
+      if(brand == elt.brand){
+        let list =[]
+        brands[brand]
+      }
+  }
+}
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
