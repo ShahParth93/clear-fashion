@@ -170,24 +170,44 @@ console.log(Math.round(avgBasket));
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
-const brands ={};
-for(var elt in marketplace){
-  for(var brand in uniquebrands){
-      if(brand == elt.brand){
-        let list =[]
-        brands[brand]
-      }
-  }
-}
+const groups = (get_attr) => (arr) => arr.reduce((groups, item) =>
+    {
+        const group = (groups[get_attr(item)] || []);
+        group.push(item);
+        groups[get_attr(item)] = group;
+        return groups;
+    }, {});
+
+
+const group_brand = groups(elt => elt.brand);
+
+const products_grouped_by_brand = group_brand(marketplace);
+console.log(products_grouped_by_brand);
+
+
+
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
-
+console.log("Here are the products sorted by price for each brand");
+for (const [key, value] of Object.entries(products_grouped_by_brand)) {
+    var array = value;
+    array.sort(compareprice);
+  
+}
+console.log(products_grouped_by_brand);
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
+console.log("Here are the products sorted by date for each brand");
+for (const [key, value] of Object.entries(products_grouped_by_brand)) {
+    var array = value;
+    array.sort(comparedate);
+  
+}
+console.log(products_grouped_by_brand);
 
 
 
