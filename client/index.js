@@ -1,7 +1,7 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
 
-console.log('🚀 This is it.');
+//console.log('🚀 This is it.');
 
 const MY_FAVORITE_BRANDS = [{
   'name': 'Hopaal',
@@ -14,8 +14,8 @@ const MY_FAVORITE_BRANDS = [{
   'url': 'https://adresse.paris/'
 }]
 
-console.table(MY_FAVORITE_BRANDS);
-console.log(MY_FAVORITE_BRANDS[0]);
+//console.table(MY_FAVORITE_BRANDS);
+//console.log(MY_FAVORITE_BRANDS[0]);
 
 
 
@@ -35,7 +35,7 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 2. Log the variable
 
 var link_cheapest_tshirt = 'https://www.loom.fr/collections/tous-les-vetements/products/le-t-shirt';
-console.log(link_cheapest_tshirt);
+//console.log(link_cheapest_tshirt);
 
 
 
@@ -53,7 +53,7 @@ console.log(link_cheapest_tshirt);
 // 2. Log the variable
 
 var NbProducts = marketplace.length;
-console.log(NbProducts);
+//console.log(NbProducts);
 
 
 // 🎯 TODO: Brands name
@@ -62,11 +62,11 @@ console.log(NbProducts);
 // 3. Log how many brands we have
 const listbrands = [];
 marketplace.forEach(element => listbrands.push(element.brand));
-console.log(listbrands);
+//console.log(listbrands);
 
 const uniquebrands = [...new Set(listbrands)];
 ///... allows to transorm the set back into an array 
-console.log(uniquebrands);
+//console.log(uniquebrands);
 
 
 //const brandlist = marketplace.map(product => product.brand);
@@ -90,7 +90,7 @@ var sortbyprice = marketplace.sort(compareprice);
 
 const listbrandsprice = [];
 sortbyprice.forEach(element => listbrandsprice.push(element));
-console.log(listbrandsprice);
+//console.log(listbrandsprice);
 
 
 
@@ -115,7 +115,7 @@ var sortbydate = marketplace.sort(comparedate);
 sortbydate.reverse();
 const listbrandsdate = [];
 sortbydate.forEach(element => listbrandsdate.push(element));
-console.log(listbrandsdate);
+//console.log(listbrandsdate);
 
 
 
@@ -130,7 +130,7 @@ for (var i = 0; i < marketplace.length; i++) {
   }
 }
 
-console.log(listbrands50n100);
+//console.log(listbrands50n100);
 
 
 
@@ -142,7 +142,7 @@ for (var i = 0; i < marketplace.length; i++) {
   s=s+marketplace[i].price;
 }
 var avgBasket = s/marketplace.length;
-console.log(Math.round(avgBasket));
+//console.log(Math.round(avgBasket));
 
 
 
@@ -182,32 +182,32 @@ const groups = (get_attr) => (arr) => arr.reduce((groups, item) =>
 const group_brand = groups(elt => elt.brand);
 
 const products_grouped_by_brand = group_brand(marketplace);
-console.log(products_grouped_by_brand);
+//console.log(products_grouped_by_brand);
 
 
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
-console.log("Here are the products sorted by price for each brand");
+//console.log("Here are the products sorted by price for each brand");
 for (const [key, value] of Object.entries(products_grouped_by_brand)) {
     var array = value;
     array.sort(compareprice);
   
 }
-console.log(products_grouped_by_brand);
+//console.log(products_grouped_by_brand);
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
-console.log("Here are the products sorted by date for each brand");
+//console.log("Here are the products sorted by date for each brand");
 for (const [key, value] of Object.entries(products_grouped_by_brand)) {
     var array = value;
     array.sort(comparedate);
   
 }
-console.log(products_grouped_by_brand);
+//console.log(products_grouped_by_brand);
 
 
 
@@ -246,7 +246,7 @@ function brandPercentile(b){
     return pricessorted[base]*(1-(position%1))+pricessorted[base+1]*(position%1);
   } 
 }
-uniquebrands.forEach(element => console.log(element+ ': '+brandPercentile(element)) );
+//uniquebrands.forEach(element => console.log(element+ ': '+brandPercentile(element)) );
 
 
 /**
@@ -331,7 +331,7 @@ var d = Date.parse(today);
 var w2 = (14*24*60*60*1000);//two weeks in miliseconds
 
 const newproduct = (element) => d - Date.parse(element.released) < w2;
-console.log(COTELE_PARIS.some(newproduct)); //at least one new product
+//console.log(COTELE_PARIS.some(newproduct)); //at least one new product
 
 
 
@@ -340,23 +340,27 @@ console.log(COTELE_PARIS.some(newproduct)); //at least one new product
 // // A reasonable price if all the products are less than 100€
 
 const reasonableprice = (element) => element.price < 100;
-console.log(COTELE_PARIS.every(reasonableprice));
+//console.log(COTELE_PARIS.every(reasonableprice));
 
 
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
+
+/*
 for(var i=0;i<COTELE_PARIS.length;i++){
   if(COTELE_PARIS[i].uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131'){
     console.log(COTELE_PARIS[i]);
   }
 }
-
+*/
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+
+/*
 for(var i=0;i<COTELE_PARIS.length;i++){
   if(COTELE_PARIS[i].uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131'){
     const index = COTELE_PARIS.indexOf(COTELE_PARIS[i]);
@@ -367,6 +371,7 @@ for(var i=0;i<COTELE_PARIS.length;i++){
 }
 console.log(COTELE_PARIS);
 
+*/
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -382,8 +387,8 @@ jacket.favorite = true;
 // 1. Log `blueJacket` and `jacket` variables
 // 2. What do you notice?
 
-console.log(blueJacket);
-console.log(jacket);
+//console.log(blueJacket);
+//console.log(jacket);
 
 //blueJacket also has the property 'favorite' set to true
 
@@ -395,8 +400,8 @@ blueJacket = {
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
 jacket = Object.assign({}, blueJacket, { favorite: true });
-console.log(jacket);
-console.log(blueJacket);
+//console.log(jacket);
+//console.log(blueJacket);
 
 
 
@@ -410,4 +415,4 @@ console.log(blueJacket);
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
 localStorage.setItem("MY_FAVORITE_BRANDS", MY_FAVORITE_BRANDS);
-console.log(localStorage);
+//console.log(localStorage);

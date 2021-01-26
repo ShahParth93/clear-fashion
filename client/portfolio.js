@@ -5,9 +5,12 @@
 let currentProducts = [];
 let currentPagination = {};
 
+let currentBrands = [];
+
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectBrand = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
@@ -45,6 +48,16 @@ const fetchProducts = async (page = 1, size = 12) => {
     return {currentProducts, currentPagination};
   }
 };
+
+
+/**
+ * Fetch brands from list of products
+ * @return {Object}
+ */
+
+function getBrandsFromProducts(products){
+  return [... new Set(products.map(product => product.brand))];
+}
 
 /**
  * Render list of products
@@ -86,9 +99,22 @@ const renderPagination = pagination => {
   selectPage.selectedIndex = currentPage - 1;
 };
 
+/**
+ * Render brands selector
+ * @param  {Object} brands
+ */
+const renderBrands = brands => {
+  const options = Array.from(
+    {'length': brands.length},
+    (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
+  ).join('');
+
+  selectBrand.innerHTML = options;
+};
+
 
 /**
- * Render page selector
+ * Render indicator selector
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
@@ -98,21 +124,14 @@ const renderIndicators = pagination => {
 };
 
 
-/**
- * Render brand selector
- * @param  {Object} pagination
- 
-const renderBrands = (brands, value) =>{
-    brands.sort();
-    const choices = brands.map(brand => `<option value="${brand}"></option>`)
-}
-**/
-
 const render = (products, pagination) => {
-  //renderBrands(get_brands(currentPagination));
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+
+  const brands = getBrandsFromProducts(currentProducts);
+  renderBrands(brands);
+
 };
 
 /**
@@ -141,12 +160,25 @@ selectPage.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
+/**
+ * Select the brands to display
+ * @type {[type]}
+ */
+
+selectBrand.addEventListener('change', event => {
+  fetchProducts(parseInt(event.target.value),selectShow.value)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination));
+});
+
+
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
+
 
 
 /**
