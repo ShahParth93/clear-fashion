@@ -14,6 +14,15 @@ const selectBrand = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
+const spanp50 = document.querySelector('#p50');
+const spanp90 = document.querySelector('#p90');
+const spanp95 = document.querySelector('#p95');
+
+const spanlastRelease = document.querySelector('#lastDate');
+
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
+
+
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -119,8 +128,18 @@ const renderBrands = brands => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-
   spanNbProducts.innerHTML = count;
+
+  spanp50.innerHTML = compute_percentile(50);
+  spanp90.innerHTML = compute_percentile(90);
+  spanp95.innerHTML = compute_percentile(95);
+
+  var prod_sort_release = [...currentProducts].sort((a, b) => sort_by_release(a, b))
+  spanlastRelease.innerHTML = prod_sort_release[prod_sort_release.length -1].released;
+
+  spanNbNewProducts.innerHTML = nb_new_products(currentProducts);
+
+
 };
 
 
@@ -133,6 +152,41 @@ const render = (products, pagination) => {
   renderBrands(brands);
 
 };
+
+
+function compute_percentile(p){
+  var products = currentProducts.sort((a, b) => compareprice(a, b, 1));
+  var i = Math.floor((p/100) * products.length)
+  return products[i].price
+}
+
+function sort_by_release(a, b){
+  let comparison = 0;
+  if(a.released > b.released){
+    comparison = 1;
+  }else if(a.released < b.released){
+    comparison = -1;
+  }
+  return comparison;
+}
+
+function nb_new_products(listproducts){
+  var nb=0;
+  for(var i=0;i<currentProducts.length;i++){
+    var release = Date.parse(currentProducts[i].released);
+    var today = Date.now();
+    w2 = (14*24*60*60*1000);
+    if((today - release) < w2){
+      nb++;
+    }
+  }
+  return nb;
+}
+
+//console.log(compute_percentile(50));
+
+//console.log(currentProducts);
+
 
 /**
  * Declaration of all Listeners
@@ -193,12 +247,5 @@ selectBrand.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
-
-
-document.addEventListener('DOMContentLoaded', () =>
-  fetchProducts()
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination))
-);
 
 */
