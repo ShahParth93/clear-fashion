@@ -1,0 +1,80 @@
+h1
+{
+  font-size: 48px;
+  font-family:"Segoe print", Arial, Helvetica, sans-serif;
+  color: #000000;
+  padding:64px 0 0 0;
+  margin:16px auto;
+  font-weight:lighter;
+  -moz-box-shadow:none;  
+  -webkit-box-shadow: none;  
+  box-shadow:none;  
+  text-align:center;
+  display:block;
+  min-height:43px;
+  min-width:400px;
+  max-height:43px;
+  max-width:400px;  
+}
+
+img.displayed{
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+
+h3
+{
+  font-size: 30px;
+  font-family:"Segoe print", Arial, Helvetica, sans-serif;
+  color: #000000;
+  padding:64px 0 0 0;
+  margin:16px auto;
+  font-weight:lighter;
+  -moz-box-shadow:none;  
+  -webkit-box-shadow: none;  
+  box-shadow:none;  
+  text-align:center;
+  display:block;
+  min-height:86px;
+  min-width:400px;
+  max-height:86px;
+  max-width:600px;
+
+}
+/*
+img.indicator{
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+
+img.product{
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+*/
+
+img.Reasonable{
+  position:relative; 
+  left:50px; 
+}
+img.Recent{
+  position:relative; 
+  left:60px; 
+}
+span{
+  font-family:"Segoe print", Arial, Helvetica, sans-serif;
+}
+
+button.favbutton{
+  transition-duration: 0.4s;
+  border-radius: 8px;
+  
+  
+}
+
+button.favbutton:hover{
+  background-color: #FFFE33;
+}

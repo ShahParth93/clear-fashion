@@ -6,20 +6,21 @@ let currentProducts = [];
 let currentPagination = {};
 
 let currentBrands = [];
+let favorites = [];
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select');
+const selectSort = document.querySelector('#sort-select');
+
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
 const spanp50 = document.querySelector('#p50');
 const spanp90 = document.querySelector('#p90');
 const spanp95 = document.querySelector('#p95');
-
 const spanlastRelease = document.querySelector('#lastDate');
-
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
 
 
@@ -81,7 +82,9 @@ const renderProducts = products => {
       <div class="product" id=${product.uuid}>
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
-        <span>${product.price}</span>
+        <span>${product.price}€</span>
+        <button onclick="add_to_favorites('${product.uuid}')" class="favbutton">Add to favorites</button>
+
       </div>
     `;
     })
@@ -114,7 +117,7 @@ const renderPagination = pagination => {
  */
 const renderBrands = brands => {
   const options = Array.from(
-    {'length': brands.length},
+    {'length': brands.length + 1},
     (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
   ).join('');
 
@@ -130,9 +133,9 @@ const renderIndicators = pagination => {
   const {count} = pagination;
   spanNbProducts.innerHTML = count;
 
-  spanp50.innerHTML = compute_percentile(50);
-  spanp90.innerHTML = compute_percentile(90);
-  spanp95.innerHTML = compute_percentile(95);
+  spanp50.innerHTML = compute_percentile(50)+ ' euros';
+  spanp90.innerHTML = compute_percentile(90)+ ' euros';
+  spanp95.innerHTML = compute_percentile(95)+ ' euros';
 
   var prod_sort_release = [...currentProducts].sort((a, b) => sort_by_release(a, b))
   spanlastRelease.innerHTML = prod_sort_release[prod_sort_release.length -1].released;
@@ -183,9 +186,17 @@ function nb_new_products(listproducts){
   return nb;
 }
 
-//console.log(compute_percentile(50));
+function add_to_favorites(id){
+  var prod = currentProducts.filter(p => p.uuid == id);
 
-//console.log(currentProducts);
+  //We will store each favorite product in the localStorage
+  favorites.push(prod);
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+
+  render(currentProducts, currentPagination);
+}
+
+console.log(localStorage);
 
 
 /**
@@ -219,13 +230,31 @@ selectPage.addEventListener('change', event => {
  * @type {[type]}
  */
 
-selectBrand.addEventListener('change', event => {
-  fetchProducts(parseInt(event.target.value),selectShow.value)
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
-});
+selectSort.addEventListener('change', event =>{
 
+  // Price ascending
+  if(event.target.value === 'price-asc'){
+    currentProducts = [...currentProducts].sort((a, b) => compareprice(a, b));
 
+  }
+  //Price descending
+  if(event.target.value === 'price-desc'){
+    currentProducts = [...currentProducts].sort((a, b) => compareprice(a, b));
+    currentProducts.reverse();
+
+  }
+  //Date ascending
+  if(event.target.value === 'date-asc'){
+    currentProducts = [...currentProducts].sort((a, b) => sort_by_release(a, b));
+
+  }
+  //Date descending
+  if(event.target.value === 'date-desc'){
+    currentProducts = [...currentProducts].sort((a, b) => sort_by_release(a, b));
+    currentProducts.reverse();
+  }
+  render(currentProducts, currentPagination);
+})
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
@@ -239,13 +268,4 @@ document.addEventListener('DOMContentLoaded', () =>
  * Filter by brand 
  * 
  
-
-
-selectBrand.addEventListener('change', event => {
-  fetchProducts(parseInt(event.target.value),currentPagination.pageSize)
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
-});
-
-
 */
