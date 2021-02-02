@@ -141,7 +141,7 @@ const renderBrands = products => {
   }
   const options = Array.from(
     brands,
-    value => `<option value="${value} selected">${value}</option>`
+    value => `<option value="${value}">${value}</option>`
   );
 
   selectBrand.innerHTML = options;
