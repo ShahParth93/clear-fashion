@@ -8,11 +8,25 @@ let currentPagination = {};
 let currentBrands = [];
 let favorites = [];
 
+
+let filter_reasonable = 'ko';
+let filter_brand = '';
+let filter_recent = 'ko';
+let filter_favorite = 'ko';
+
+const two_weeks = 1209600000;
+
+
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select');
 const selectSort = document.querySelector('#sort-select');
+
+const checkReasonable = document.querySelector('#check_reasonable_price');
+const checkRecent = document.querySelector('#check_recently_released');
+const checkFavorite = document.querySelector('#check_favorite');
+
 
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
@@ -65,9 +79,12 @@ const fetchProducts = async (page = 1, size = 12) => {
  * @return {Object}
  */
 
+/*
 function getBrandsFromProducts(products){
   return [... new Set(products.map(product => product.brand))];
 }
+*/
+
 
 /**
  * Render list of products
@@ -115,13 +132,21 @@ const renderPagination = pagination => {
  * Render brands selector
  * @param  {Object} brands
  */
-const renderBrands = brands => {
+const renderBrands = products => {
+  var brands =[];
+  for(var i =0;i<products.length;i++){
+    if (!(brands.includes(products[i].brand))){
+      brands.push(products[i].brand);
+    }
+  }
   const options = Array.from(
-    {'length': brands.length + 1},
-    (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
-  ).join('');
+    brands,
+    value => `<option value="${value} selected">${value}</option>`
+  );
 
   selectBrand.innerHTML = options;
+  selectBrand.selectedIndex = brands.indexOf(filter_brand);
+
 };
 
 
@@ -147,12 +172,13 @@ const renderIndicators = pagination => {
 
 
 const render = (products, pagination) => {
+  products = filter_products(products);
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
 
-  const brands = getBrandsFromProducts(currentProducts);
-  renderBrands(brands);
+  //const brands = getBrandsFromProducts(currentProducts);
+  //renderBrands(products);
 
 };
 
@@ -175,11 +201,11 @@ function sort_by_release(a, b){
 
 function nb_new_products(listproducts){
   var nb=0;
-  for(var i=0;i<currentProducts.length;i++){
-    var release = Date.parse(currentProducts[i].released);
+  for(var i=0;i<listproducts.length;i++){
+    var release = Date.parse(listproducts[i].released);
     var today = Date.now();
-    w2 = (14*24*60*60*1000);
-    if((today - release) < w2){
+    var w2 = (14*24*60*60*1000);
+    if((today - release) / 1000 / 3600 / 24 < 30){
       nb++;
     }
   }
@@ -194,6 +220,24 @@ function add_to_favorites(id){
   localStorage.setItem('favorites', JSON.stringify(favorites));
 
   render(currentProducts, currentPagination);
+
+}
+
+function filter_products(products){
+  if(filter_reasonable === 'ok') {
+    products = products.filter(p => p.price < 100);
+  }
+  if(filter_favorite === 'ok') {
+    products = favorites;
+  }
+  if(filter_recent === 'ok') {
+    products = products.filter(p => (Date.now() - Date.parse(p.released)) / 1000 / 3600 / 24 < 30 );
+  }
+  renderBrands(products);
+  if(filter_brand !== '') {
+    products = products.filter(p => p['brand'] === filter_brand);
+  }
+  return products;
 }
 
 console.log(localStorage);
@@ -256,12 +300,6 @@ selectSort.addEventListener('change', event =>{
   render(currentProducts, currentPagination);
 })
 
-document.addEventListener('DOMContentLoaded', () =>
-  fetchProducts()
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination))
-);
-
 
 
 /**
@@ -269,3 +307,46 @@ document.addEventListener('DOMContentLoaded', () =>
  * 
  
 */
+selectBrand.addEventListener('change', event => {
+  filter_brand = event.target.value;
+  render(currentProducts, currentPagination);
+});
+
+
+
+checkRecent.addEventListener('change', () => {
+  if(filter_recent === 'ok'){
+    filter_recent = 'ko';
+  }else{
+    filter_recent = 'ok';
+  }
+  render(currentProducts, currentPagination);
+});
+
+
+checkReasonable.addEventListener('change', () => {
+  if(filter_reasonable === 'ok'){
+    filter_reasonable = 'ko';
+  }else{
+    filter_reasonable = 'ok';
+  }
+  render(currentProducts, currentPagination);
+});
+
+checkFavorite.addEventListener('change', () => {
+  if(filter_favorite === 'ok'){
+    filter_favorite = 'ko';
+  }else{
+    filter_favorite = 'ok';
+  }
+  renderProducts(favorites);
+});
+
+
+document.addEventListener('DOMContentLoaded', () =>
+  fetchProducts()
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination))
+);
+
+

@@ -64,6 +64,10 @@ img.Recent{
   position:relative; 
   left:60px; 
 }
+img.Favorite{
+  position:relative; 
+  left:60px; 
+}
 span{
   font-family:"Segoe print", Arial, Helvetica, sans-serif;
 }
@@ -78,3 +82,38 @@ button.favbutton{
 button.favbutton:hover{
   background-color: #FFFE33;
 }
+
+/*
+#filters{
+  display: flex;
+  flex-flow: row nowrap; 
+  justify-content: space-between;
+}
+
+*/
+
+#filters{
+  width:700px; 
+  height:200px; 
+  padding-top:20px; 
+}
+
+#block1{ 
+  float:left;  
+  width:200px; 
+  height:160px; 
+} 
+#block2{ 
+  float:left; 
+  width:200px; 
+  height:160px; 
+  margin-left:20px; 
+} 
+#block3{ 
+  float:left;  
+  width:200px; 
+  height:160px; 
+  margin-left:40px; 
+
+
+} 
