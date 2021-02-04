@@ -213,16 +213,50 @@ function nb_new_products(listproducts){
 }
 
 function add_to_favorites(id){
-  var prod = currentProducts.filter(p => p.uuid == id);
+  //var prod = currentProducts.filter(p => p.uuid == id);
 
   //We will store each favorite product in the localStorage
-  favorites.push(prod);
+  //favorites.push(prod);
+  //localStorage.setItem('favorites', JSON.stringify(favorites));
+  var nbSameId=0;
+  for(var i=0;i<favorites.length;i++){
+    if(favorites[i].uuid === id){
+      nbSameId++
+    }
+  }
+
+  if(nbSameId>=1){
+    for(var i=0;i<favorites.length;i++){
+      if(favorites[i].uuid !== id){
+        favorites.push(favorites[i])
+      }
+    }
+  }else{
+    for(var i=0;i<currentProducts.length;i++){
+      if(currentProducts[i].uuid === id){
+        favorites.push(currentProducts[i])
+      }
+    }  
+  }
   localStorage.setItem('favorites', JSON.stringify(favorites));
 
   render(currentProducts, currentPagination);
 
-}
 
+}
+  /*
+  if(favorites.some(p => p.uuid === id)) {
+    favorites = favorites.filter(p => p.uuid !== id);
+  } else {
+    favorites.push(currentProducts.find(p => p.uuid === id));
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+
+
+  render(currentProducts, currentPagination);
+
+}
+*/
 function filter_products(products){
   if(filter_reasonable === 'ok') {
     products = products.filter(p => p.price < 100);
