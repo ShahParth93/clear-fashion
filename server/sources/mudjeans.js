@@ -1,6 +1,9 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const MUD_JEANS = 'https://mudjeans.eu'
+
+
 /**
  * Parse webpage e-shop
  * @param  {String} data - html response
@@ -47,6 +50,33 @@ module.exports.scrape = async url => {
 
   if (status >= 200 && status < 300) {
     return parse(data);
+  }
+
+  console.error(status);
+
+  return null;
+};
+
+const parse_links = data =>{
+  const $ = cheerio.load(data);
+
+  return $('.header-navigation--primary .header-nav-list-item')
+    .map((i,element) => {
+      const href = $(element)
+        .find('a')
+        .attr('href')
+
+      return `${MUD_JEANS}${href}`;
+    })
+    .get();
+};
+
+module.exports.scrape_links = async (url = MUD_JEANS) => {
+  const response = await axios(url);
+  const {data, status} = response;
+
+  if (status >= 200 && status < 300) {
+    return parse_links(data);
   }
 
   console.error(status);

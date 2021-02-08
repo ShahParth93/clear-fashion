@@ -1,6 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const ADRESSE_PARIS = 'https://adresse.paris/630-toute-la-collection'
 /**
  * Parse webpage e-shop
  * @param  {String} data - html response

@@ -1,19 +1,97 @@
 /* eslint-disable no-console, no-process-exit */
-//const dedicatedbrand = require('./sources/dedicatedbrand');
-//const adresse= require('./sources/adresse');
+'use strict';
+const dedicatedbrand = require('./sources/dedicatedbrand');
+const adresse= require('./sources/adresse');
 const mudjeans= require('./sources/mudjeans');
-//https://www.dedicatedbrand.com/en/men/news
-//https://adresse.paris/602-nouveautes
-//https://mudjeans.eu/collections/men-buy-jeans
+const Readline = require('readline'); // for reading inputs
+const fs = require('fs');
 
-// CHoisir quel site puis parcourir tous les url
-async function sandbox (eshop = 'https://mudjeans.eu/collections/women-jeans') {
+
+let allProducts = [];
+let nbProducts = 0;
+
+async function mjeans() {
   try {
-    console.log(🕵️‍♀️  browsing ${eshop} source;
 
-    //const products = await dedicatedbrand.scrape(eshop);
-    const products = await mudjeans.scrape(eshop);
+    const pages = await mudjeans.scrape_links('https://mudjeans.eu')
+
+    console.log(pages);
+    console.log(pages.length);
+    
+    for(var i=0;i<pages.length;i++){
+      console.log(pages[i]);
+      const products = await mudjeans.scrape(pages[i]);
+
+      console.log(`There are ${products.length} products in this page`);
+      console.log(products);
+      nbProducts = nbProducts + products.length;
+      allProducts.push(products);
+    }
+    
+    console.log(`This website stores ${nbProducts} products`);
+
+    console.log('done');
+    process.exit(0);
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+}
+
+
+async function dedicated () {
+  try {
+
+
+    const pages = await dedicatedbrand.scrape_links('https://www.dedicatedbrand.com')
+
+    console.log(pages);
+
+    console.log(pages.length);
+
+
+    for(var i=0;i<pages.length;i++){
+      console.log(pages[i]);
+
+      const products = await dedicatedbrand.scrape(pages[i]);
+
+      console.log(`There are ${products.length} products in this page`);
+
+      console.log(products);
+
+      /*
+      ---------------JSON FILE---------------
+      let data = JSON.stringify(products);
+      fs.writeFileSync('dedicated.json', data);
+      */
+
+
+      nbProducts = nbProducts + products.length;
+      allProducts.push(products);
+    }
+
+    
+    console.log(`This website stores ${nbProducts} products`);
+
+    console.log('done');
+
+    process.exit(0);
+
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+}
+
+async function adress() {
+  try {
+
+    const products = await adresse.scrape('https://adresse.paris/630-toute-la-collection')
+
     console.log(products);
+
+    console.log(`This website stores ${products.length} products`);
+
     console.log('done');
     process.exit(0);
   } catch (e) {
@@ -24,4 +102,26 @@ async function sandbox (eshop = 'https://mudjeans.eu/collections/women-jeans') {
 
 const [,, eshop] = process.argv;
 
-sandbox(eshop);
+
+const rl = Readline.createInterface({ // for reading inputs
+    input : process.stdin,
+    output : process.stdout,
+    terminal : false
+})
+
+console.log("Which website do you want to scrap ? 1 - Adresse Paris | 2 - Dedicated Brand | 3 - Mud Jeans")
+
+rl.on('line', (input) => {
+  if(input == 1){
+    adress();
+  }
+  if(input == 2){
+    dedicated();
+  }
+  if(input == 3){
+    mjeans();
+  }
+});
+
+
+
