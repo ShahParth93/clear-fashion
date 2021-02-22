@@ -30,6 +30,9 @@ async function mjeans() {
     
     console.log(`This website stores ${nbProducts} products`);
 
+    let data = JSON.stringify(allProducts);
+    fs.writeFileSync('mudjeans.json', data);
+
     console.log('done');
     process.exit(0);
   } catch (e) {
@@ -58,13 +61,7 @@ async function dedicated () {
       console.log(`There are ${products.length} products in this page`);
 
       console.log(products);
-
-      /*
-      ---------------JSON FILE---------------
-      let data = JSON.stringify(products);
-      fs.writeFileSync('dedicated.json', data);
-      */
-
+  
 
       nbProducts = nbProducts + products.length;
       allProducts.push(products);
@@ -73,7 +70,12 @@ async function dedicated () {
     
     console.log(`This website stores ${nbProducts} products`);
 
+    let data = JSON.stringify(allProducts);
+    fs.writeFileSync('dedicated.json', data);
+
+
     console.log('done');
+
 
     process.exit(0);
 
@@ -91,6 +93,13 @@ async function adress() {
     console.log(products);
 
     console.log(`This website stores ${products.length} products`);
+
+    let data = JSON.stringify(products);
+    fs.writeFileSync('address.json', JSON.stringify(products));
+
+    
+
+  
 
     console.log('done');
     process.exit(0);
