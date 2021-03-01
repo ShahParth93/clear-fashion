@@ -10,6 +10,8 @@ const fs = require('fs');
 let allProducts = [];
 let nbProducts = 0;
 
+let urls =['https://mudjeans.eu','https://www.dedicatedbrand.com','https://adresse.paris/630-toute-la-collection'];
+
 async function mjeans() {
   try {
 
@@ -109,6 +111,77 @@ async function adress() {
   }
 }
 
+
+
+/* Changement */
+async function main() {
+  try {
+
+    const p1 = await mudjeans.scrape_links('https://mudjeans.eu')
+
+    console.log(p1);
+    console.log(p1.length);
+    
+    for(var i=0;i<p1.length;i++){
+      //console.log(p1[i]);
+      const products = await mudjeans.scrape(p1[i]);
+
+      //console.log(`There are ${products.length} products in this page`);
+      //console.log(products);
+      //nbProducts = nbProducts + products.length;
+      for(var j=0;j<products.length;j++){
+        allProducts.push(products[j]);  
+      }
+      
+    }
+
+    const p2 = await dedicatedbrand.scrape_links('https://www.dedicatedbrand.com')
+
+    console.log(p2);
+
+    console.log(p2.length);
+
+
+    for(var i=0;i<p2.length;i++){
+      console.log(p2[i]);
+
+      const products = await dedicatedbrand.scrape(p2[i]);
+
+      //console.log(`There are ${products.length} products in this page`);
+      //console.log(products);
+      //nbProducts = nbProducts + products.length;
+      for(var j=0;j<products.length;j++){
+        allProducts.push(products[j]);  
+      }
+    }
+
+    const p3 = await adresse.scrape('https://adresse.paris/630-toute-la-collection')
+
+    console.log(p3);
+    for(var j=0;j<p3.length;j++){
+        allProducts.push(p3[j]);  
+    }
+    
+
+
+    let data = JSON.stringify(allProducts);
+    fs.writeFileSync('main.json', data);
+
+
+    console.log('done');
+
+
+    process.exit(0);
+
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+}
+
+
+
+
 const [,, eshop] = process.argv;
 
 
@@ -118,7 +191,7 @@ const rl = Readline.createInterface({ // for reading inputs
     terminal : false
 })
 
-console.log("Which website do you want to scrap ? 1 - Adresse Paris | 2 - Dedicated Brand | 3 - Mud Jeans")
+console.log("Which website do you want to scrap ? 1 - Adresse Paris | 2 - Dedicated Brand | 3 - Mud Jeans | 4 - All")
 
 rl.on('line', (input) => {
   if(input == 1){
@@ -129,6 +202,9 @@ rl.on('line', (input) => {
   }
   if(input == 3){
     mjeans();
+  }
+  if(input == 4){
+    main();
   }
 });
 
