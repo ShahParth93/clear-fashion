@@ -6,6 +6,7 @@ const mudjeans= require('./sources/mudjeans');
 const Readline = require('readline'); // for reading inputs
 const fs = require('fs');
 
+const node = require('./node');
 
 let allProducts = [];
 let nbProducts = 0;
@@ -208,5 +209,7 @@ rl.on('line', (input) => {
   }
 });
 
+const collection = node.db.collection('products');
+const result = collection.insertMany(allProducts);
 
 
