@@ -13,6 +13,7 @@ const parse = data => {
   return $('.product_list.grid.row .product-container .right-block')
     .map((i, element) => {
       
+      const brand = 'adresse';
       const name = $(element)
         .find('.product-name-container.versionmob .product-name')
         .text()
@@ -24,7 +25,7 @@ const parse = data => {
           .text()
       );
 
-      return {name, price};
+      return {brand,name, price};
     })
     .get();
 };

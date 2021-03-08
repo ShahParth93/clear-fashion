@@ -14,6 +14,8 @@ const parse = data => {
 
   return $('.shopify-section.collection__landing .col.col-xs-6.col-md-3')
     .map((i, element) => {
+
+      const brand = 'mudjeans';
       const name = $(element)
         .find('.product-title')
         .text()
@@ -34,7 +36,7 @@ const parse = data => {
           )
       ;
 
-      return {name, price,lease};
+      return {brand,name, price,lease};
     })
     .get();
 };

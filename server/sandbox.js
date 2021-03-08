@@ -1,4 +1,3 @@
-/* eslint-disable no-console, no-process-exit */
 'use strict';
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adresse= require('./sources/adresse');
@@ -7,6 +6,9 @@ const Readline = require('readline'); // for reading inputs
 const fs = require('fs');
 
 //const node = require('./node');
+
+const db = require('./db');
+
 
 let allProducts = [];
 let nbProducts = 0;
@@ -168,20 +170,26 @@ async function all() {
     
     console.log("Scrapping done for adresse paris");
 
+
+    const result = await db.insert(allProducts);
+
+    console.log(`💽  ${result.insertedCount} inserted products`);
+
+    /*
     let data = JSON.stringify(allProducts);
     fs.writeFileSync('main.json', data);
 
 
     console.log('All products are in the main.json');
 
-    
-    return allProducts;
-    process.exit(0);
+    */
+    //return allProducts;
+    //process.exit(0);
 
     
   } catch (e) {
     console.error(e);
-    process.exit(1);
+    //process.exit(1);
   }
   
 }
@@ -215,9 +223,6 @@ rl.on('line', (input) => {
     all();
   }
 });
+
 */
-
-all();
-
-module.exports = all;
-
+all()
