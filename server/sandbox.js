@@ -6,7 +6,7 @@ const mudjeans= require('./sources/mudjeans');
 const Readline = require('readline'); // for reading inputs
 const fs = require('fs');
 
-const node = require('./node');
+//const node = require('./node');
 
 let allProducts = [];
 let nbProducts = 0;
@@ -115,13 +115,13 @@ async function adress() {
 
 
 /* Changement */
-async function main() {
+async function all() {
   try {
 
     const p1 = await mudjeans.scrape_links('https://mudjeans.eu')
 
-    console.log(p1);
-    console.log(p1.length);
+    //console.log(p1);
+    //console.log(p1.length);
     
     for(var i=0;i<p1.length;i++){
       //console.log(p1[i]);
@@ -136,15 +136,17 @@ async function main() {
       
     }
 
+    console.log("Scrapping done for mudjeans");
+
     const p2 = await dedicatedbrand.scrape_links('https://www.dedicatedbrand.com')
 
-    console.log(p2);
+    //console.log(p2);
 
-    console.log(p2.length);
+    //console.log(p2.length);
 
 
     for(var i=0;i<p2.length;i++){
-      console.log(p2[i]);
+      //console.log(p2[i]);
 
       const products = await dedicatedbrand.scrape(p2[i]);
 
@@ -155,29 +157,33 @@ async function main() {
         allProducts.push(products[j]);  
       }
     }
+    console.log("Scrapping done for dedicatedbrand");
 
     const p3 = await adresse.scrape('https://adresse.paris/630-toute-la-collection')
 
-    console.log(p3);
+    //console.log(p3);
     for(var j=0;j<p3.length;j++){
         allProducts.push(p3[j]);  
     }
     
-
+    console.log("Scrapping done for adresse paris");
 
     let data = JSON.stringify(allProducts);
     fs.writeFileSync('main.json', data);
 
 
-    console.log('done');
+    console.log('All products are in the main.json');
 
-
+    
+    return allProducts;
     process.exit(0);
 
+    
   } catch (e) {
     console.error(e);
     process.exit(1);
   }
+  
 }
 
 
@@ -192,6 +198,7 @@ const rl = Readline.createInterface({ // for reading inputs
     terminal : false
 })
 
+/*
 console.log("Which website do you want to scrap ? 1 - Adresse Paris | 2 - Dedicated Brand | 3 - Mud Jeans | 4 - All")
 
 rl.on('line', (input) => {
@@ -205,11 +212,12 @@ rl.on('line', (input) => {
     mjeans();
   }
   if(input == 4){
-    main();
+    all();
   }
 });
+*/
 
-const collection = node.db.collection('products');
-const result = collection.insertMany(allProducts);
+all();
 
+module.exports = all;
 
