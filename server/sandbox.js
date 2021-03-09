@@ -175,6 +175,9 @@ async function all() {
 
     console.log(`💽  ${result.insertedCount} inserted products`);
 
+
+    
+
     /*
     let data = JSON.stringify(allProducts);
     fs.writeFileSync('main.json', data);
@@ -195,6 +198,13 @@ async function all() {
 }
 
 
+async function testquery(){
+
+    const resu = await db.filteredProducts(5,'dedicated',24);
+
+    console.log(resu);
+
+}
 
 
 const [,, eshop] = process.argv;
@@ -225,4 +235,4 @@ rl.on('line', (input) => {
 });
 
 */
-all()
+testquery()
