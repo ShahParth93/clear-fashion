@@ -155,7 +155,7 @@ module.exports.filteredProducts = async (limit, brand, price) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find({'brand':brand,'price':{$lte:price}}).limit(limit).sort({"price":1}).toArray();
+    const result = await collection.find({'brand':brand,'price':{$lte:price}}).limit(limit).toArray();
 
     return result;
   } catch (error) {

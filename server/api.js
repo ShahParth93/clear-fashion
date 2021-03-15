@@ -23,10 +23,18 @@ app.get('/', (request, response) => {
 
 app.get('/products/search',  async (request, response)=>{
     
+    var limit;
+    if(request.query.limit){
+        limit = parseInt(request.query.limit);
+    }else{
+        limit = 12
+    }
+    
     let brand = request.query.brand;
-    let limit = parseInt(request.query.limit);
+    
     let price = parseInt(request.query.price);
-
+    
+    
     let res  = await db.filteredProducts(limit, brand, price);
     let total = res.length;
     response.send({
