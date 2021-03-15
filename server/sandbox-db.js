@@ -34,10 +34,15 @@ async function sandbox () {
     console.log(`🕵️‍♀️  browsing ${pages.length} pages with Promise.all`);
 
     const promises = pages.map(loom.scrape);
+    const promises = pages.map(page => loom.scrape(page));
     const results = await Promise.all(promises);
 
     console.log(`👕 ${results.length} results of promises found`);
     console.log(`👕 ${results.flat().length} products found`);
+
+
+    console.log(results);
+    console.log(results.flat());
 
     products.push(results.flat());
     products = products.flat();
@@ -58,6 +63,7 @@ async function sandbox () {
 
     const loomOnly = await db.find({'brand': 'loom'});
 
+    console.log(`👕 ${loomOnly.length} total of products found for Loom`);
     console.log(loomOnly);
 
     db.close();
