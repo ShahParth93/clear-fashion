@@ -27,19 +27,23 @@ app.get('/products/:id',  async (request, response)=>{
 })
 
 app.get('/products/search',  async (request, response)=>{
+    /*
     let brand = request.params.brand
     let limit = request.params.limit
     let price = request.params.price
 
     let res  = await db.filteredProducts(limit, brand, price)
-
-    response.send({
-        'limit':limit,
+    */
+    response.send(
+        /*'limit':limit,
         'brand':brand,
         'price':price
+        */
         
-    });
-
+        {'test':52}
+        
+    );
+    
 })
 
 
