@@ -86,6 +86,19 @@ module.exports.find = async query => {
   }
 };
 
+module.exports.findLimited = async (query,l) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find(query).limit(l).toArray();
+
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.find.limited..', error);
+    return null;
+  }
+};
+
 module.exports.findByPrice = async price => {
   try {
     const db = await getDB();
@@ -155,7 +168,7 @@ module.exports.filteredProducts = async (limit, brand, price) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find({'brand':brand,'price':{$lte:price}}).limit(limit).toArray();
+    const result = await collection.find({'brand':brand,'price':{$lt:price}}).limit(limit).toArray();
 
     return result;
   } catch (error) {

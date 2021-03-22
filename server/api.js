@@ -23,26 +23,88 @@ app.get('/', (request, response) => {
 
 app.get('/products/search',  async (request, response)=>{
     
-    var limit;
-    if(request.query.limit){
-        limit = parseInt(request.query.limit);
-    }else{
-        limit = 12
-    }
-    
+    let limit = request.query.limit;
     let brand = request.query.brand;
-    
-    let price = parseInt(request.query.price);
-    
-    
-    let res  = await db.filteredProducts(limit, brand, price);
-    let total = res.length;
-    response.send({
-        'limit':limit,
-        'total':total,
-        'results':res
-        
-    });
+    let price = request.query.price;
+    if(brand != null && price != null && limit != null)
+    {
+        limit = parseInt(limit);
+        price = parseInt(price);
+        const result = await db.filteredProducts(limit,brand,price);
+        response.send({
+            'limit':limit,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(brand != null && price != null)
+    {
+        price = parseInt(price);
+        const result = await db.filteredProducts(12,brand,price);
+        response.send({
+            'limit':limit,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(brand != null && limit != null)
+    {
+        limit = parseInt(limit);
+        const result = await db.findLimited({'brand': brand},limit);
+        response.send({
+            'limit':limit,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(price != null && limit != null)
+    {
+        limit = parseInt(limit);
+        price = parseInt(price);
+        const result = await db.findLimited({'price': {$lt : price}}, limit);
+        response.send({
+            'limit':limit,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(brand != null)
+    {
+        const result = await db.findLimited({'brand': brand}, 12);
+        response.send({
+            'limit':12,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(price != null)
+    {
+        price = parseInt(price);
+        const result = await db.findLimited({'price': {$lt : price}}, 12);
+        response.send({
+            'limit':12,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+    if(limit != null)
+    {
+        limit = parseInt(limit);
+        const result = await db.findLimited({}, limit);
+        response.send({
+            'limit':limit,
+            'total':result.length,
+            'results':result
+            
+        });
+    }
+
     
 })
 
