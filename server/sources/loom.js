@@ -16,6 +16,13 @@ const parse = data => {
         .find('.product-title a')
         .attr('href')}`;
 
+      let photo = $(element)
+        .find('noscript img.product_card__image')
+        .attr('src');
+
+      photo = "https:" + photo
+
+
       return {
         link,
         'brand': 'loom',
@@ -29,9 +36,7 @@ const parse = data => {
           .text()
           .trim()
           .replace(/\s/g, ' '),
-        'photo': $(element)
-          .find('noscript img.product_card__image')
-          .attr('src'),
+        photo,
         '_id': uuidv5(link, uuidv5.URL)
       };
     })

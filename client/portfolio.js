@@ -1,4 +1,3 @@
-// Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
 
 // current products on the page
@@ -13,6 +12,8 @@ let filter_reasonable = 'ko';
 let filter_brand = '';
 let filter_recent = 'ko';
 let filter_favorite = 'ko';
+
+let cFavorite = 0;
 
 const two_weeks = 1209600000;
 
@@ -54,10 +55,14 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
+// https://clear-fashion-api.vercel.app
+//https://server-ruddy-delta.vercel.app/products?page=${page}&size=${size}
+
+/*
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://server-ruddy-delta.vercel.app/products?page=${page}&size=${size}`
     );
     const body = await response.json();
 
@@ -73,6 +78,40 @@ const fetchProducts = async (page = 1, size = 12) => {
   }
 };
 
+*/
+
+const fetchProducts = async (page = 1, size = 12,brand="All") => {
+  try {
+    if (brand == "All"){
+      const response = await fetch(
+      `https://server-ruddy-delta.vercel.app/products?page=${page}&size=${size}`
+      );
+      const body = await response.json();
+
+      if (body.success !== true) {
+        console.error(body);
+        return {currentProducts, currentPagination};
+      }
+
+      return body.data;
+    }
+    else{
+      const response = await fetch(
+      `https://server-ruddy-delta.vercel.app/products?page=${page}&size=${size}&brand=${brand}`
+      );
+      const body = await response.json();
+
+      if (body.success !== true) {
+        console.error(body);
+        return {currentProducts, currentPagination};
+      }
+      return body.data;
+    }
+  } catch (error) {
+    console.error(error);
+    return {currentProducts, currentPagination};
+  }
+};
 
 /**
  * Fetch brands from list of products
@@ -91,19 +130,43 @@ function getBrandsFromProducts(products){
  * @param  {Array} products
  */
 const renderProducts = products => {
+
+  
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
   const template = products
     .map(product => {
+      /*
       return `
       <div class="product" id=${product.uuid}>
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}€</span>
-        <button onclick="add_to_favorites('${product.uuid}')" class="favbutton">Add to favorites</button>
+        <input type="checkbox" id='${product.name}' name="favourite">
+        <img src="${product.photo}">
+
 
       </div>
     `;
+    */
+      return `
+          <div class="product-card" id=${product._id}>
+            <div class="product-image">
+              <a href="${product.link} target="_blank">
+                <img src="${product.photo}">
+              </a>
+            </div>
+            <div class="product-info">
+              <span><b>${product.brand}</b></span>
+              <a class="prodname" href="${product.link}" target="_blank">${product.name}</a>
+              <p>${product.price}€</p>
+            </div>
+            <span class ='spanfav'>Add to favorites</span>
+            <input type="checkbox" id='${product.name}' name="favourite">
+
+
+          </div>
+      `;
     })
     .join('');
 
@@ -113,6 +176,35 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
+const addfavorite = (product) => {
+  if(favorites.includes(product) == false)
+  {
+    favorites.push(product)
+  }
+  else if(favorites.includes(product) == true)
+  {
+    for(var i = 0; i < favorites.length; i++)
+    {
+      if(favorites[i] == product)
+      {
+        favorites.splice(i,1);
+      }
+    }
+  }
+}
+
+const renderFavorite = (check) => {
+  if(cFavorite == 0)
+  {
+    cFavorite = 1;
+    renderProducts(favorites);
+  }
+  else
+  {
+    cFavorite = 0;
+    renderProducts(currentProducts);
+  }
+}
 /**
  * Render page selector
  * @param  {Object} pagination
@@ -133,19 +225,17 @@ const renderPagination = pagination => {
  * @param  {Object} brands
  */
 const renderBrands = products => {
-  var brands =[];
-  for(var i =0;i<products.length;i++){
-    if (!(brands.includes(products[i].brand))){
-      brands.push(products[i].brand);
-    }
-  }
-  const options = Array.from(
-    brands,
-    value => `<option value="${value}">${value}</option>`
-  );
+  const brands_list = ["dedicated","loom","mudjeans","adresse"]
+  
+  let options = '<option value="all">All</option>';
+  options += Array.from(
+    {'length': brands_list.length},
+    (value, index) => `<option value="${brands_list[index]}">${brands_list[index]}</option>`
+  ).join('');
 
   selectBrand.innerHTML = options;
-  selectBrand.selectedIndex = brands.indexOf(filter_brand);
+  selectBrand.selectedIndex = selectBrand.index;
+  //selectBrand.selectedIndex = brands.indexOf(filter_brand);
 
 };
 
@@ -154,18 +244,18 @@ const renderBrands = products => {
  * Render indicator selector
  * @param  {Object} pagination
  */
-const renderIndicators = pagination => {
+const renderIndicators = (products,pagination) => {
   const {count} = pagination;
-  spanNbProducts.innerHTML = count;
+  spanNbProducts.innerHTML = products.length;
 
-  spanp50.innerHTML = compute_percentile(50)+ ' euros';
-  spanp90.innerHTML = compute_percentile(90)+ ' euros';
-  spanp95.innerHTML = compute_percentile(95)+ ' euros';
+  spanp50.innerHTML = compute_percentile(50,products)+ '€';
+  spanp90.innerHTML = compute_percentile(90,products)+ '€';
+  spanp95.innerHTML = compute_percentile(95,products)+ '€';
 
   var prod_sort_release = [...currentProducts].sort((a, b) => sort_by_release(a, b))
-  spanlastRelease.innerHTML = prod_sort_release[prod_sort_release.length -1].released;
+  //spanlastRelease.innerHTML = prod_sort_release[prod_sort_release.length -1].released;
 
-  spanNbNewProducts.innerHTML = nb_new_products(currentProducts);
+  //spanNbNewProducts.innerHTML = nb_new_products(currentProducts);
 
 
 };
@@ -175,7 +265,7 @@ const render = (products, pagination) => {
   products = filter_products(products);
   renderProducts(products);
   renderPagination(pagination);
-  renderIndicators(pagination);
+  renderIndicators(products,pagination);
 
   //const brands = getBrandsFromProducts(currentProducts);
   //renderBrands(products);
@@ -183,10 +273,10 @@ const render = (products, pagination) => {
 };
 
 
-function compute_percentile(p){
-  var products = currentProducts.sort((a, b) => compareprice(a, b, 1));
-  var i = Math.floor((p/100) * products.length)
-  return products[i].price
+function compute_percentile(p,products){
+  var prod = products.sort((a, b) => compareprice(a, b, 1));
+  var i = Math.floor((p/100) * prod.length)
+  return prod[i].price
 }
 
 function sort_by_release(a, b){
@@ -212,54 +302,21 @@ function nb_new_products(listproducts){
   return nb;
 }
 
-function add_to_favorites(id){
-  //var prod = currentProducts.filter(p => p.uuid == id);
-
-  //We will store each favorite product in the localStorage
-  //favorites.push(prod);
-  //localStorage.setItem('favorites', JSON.stringify(favorites));
-  var nbSameId=0;
-  for(var i=0;i<favorites.length;i++){
-    if(favorites[i].uuid === id){
-      nbSameId++
-    }
-  }
-
-  if(nbSameId>=1){
-    for(var i=0;i<favorites.length;i++){
-      if(favorites[i].uuid !== id){
-        favorites.push(favorites[i])
-      }
-    }
-  }else{
-    for(var i=0;i<currentProducts.length;i++){
-      if(currentProducts[i].uuid === id){
-        favorites.push(currentProducts[i])
-      }
-    }  
-  }
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-
-  render(currentProducts, currentPagination);
 
 
-}
-  /*
+/*
   if(favorites.some(p => p.uuid === id)) {
     favorites = favorites.filter(p => p.uuid !== id);
   } else {
     favorites.push(currentProducts.find(p => p.uuid === id));
   }
   localStorage.setItem('favorites', JSON.stringify(favorites));
-
-
   render(currentProducts, currentPagination);
-
 }
 */
 function filter_products(products){
   if(filter_reasonable === 'ok') {
-    products = products.filter(p => p.price < 100);
+    products = products.filter(p => p.price < 50);
   }
   if(filter_favorite === 'ok') {
     products = favorites;
@@ -323,6 +380,8 @@ selectSort.addEventListener('change', event =>{
   }
   //Date ascending
   if(event.target.value === 'date-asc'){
+    console.log('date-asc')
+    console.log(currentProducts)
     currentProducts = [...currentProducts].sort((a, b) => sort_by_release(a, b));
 
   }
@@ -342,12 +401,16 @@ selectSort.addEventListener('change', event =>{
  
 */
 selectBrand.addEventListener('change', event => {
-  filter_brand = event.target.value;
-  render(currentProducts, currentPagination);
+  //filter_brand = event.target.value;
+  //render(currentProducts, currentPagination);
+
+  fetchProducts(currentPagination.currentPage,selectShow.value,event.target.value)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination))
 });
 
 
-
+/*
 checkRecent.addEventListener('change', () => {
   if(filter_recent === 'ok'){
     filter_recent = 'ko';
@@ -357,7 +420,7 @@ checkRecent.addEventListener('change', () => {
   render(currentProducts, currentPagination);
 });
 
-
+*/
 checkReasonable.addEventListener('change', () => {
   if(filter_reasonable === 'ok'){
     filter_reasonable = 'ko';
@@ -367,20 +430,35 @@ checkReasonable.addEventListener('change', () => {
   render(currentProducts, currentPagination);
 });
 
+/*
 checkFavorite.addEventListener('change', () => {
   if(filter_favorite === 'ok'){
     filter_favorite = 'ko';
   }else{
     filter_favorite = 'ok';
   }
-  renderProducts(favorites);
+  //renderProducts(favorites);
+  render(currentProducts, currentPagination);
+});
+*/
+
+sectionProducts.addEventListener('change', event => {
+  for(var i = 0; i < currentProducts.length; i++)
+  {
+    if(currentProducts[i].name == event.target.id)
+    {
+      addfavorite(currentProducts[i]);
+    }
+  }
+  console.log(event.target);
 });
 
+checkFavorite.addEventListener('change', event => {
+  renderFavorite(1);
+});
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
-
-

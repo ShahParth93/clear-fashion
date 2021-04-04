@@ -6,9 +6,25 @@
     <link rel="stylesheet" href="mystyle.css">
   </head>
   <body>
-    <img src="images/514169_934066.webp" alt="Clear Fashion Logo" class="displayed" width="300" height="250">
     <h1>Clear fashion</h1>
-    <h3>Find the best brand at the best price</h3>
+    <h3>Find the best product at the best price</h3>
+    <div class="row">
+      <div class="column">
+        <img src="images/p1.jpg" alt="Produit1" width="200" height="200">
+      </div>
+      <div class="column">
+        <img src="images/p2.jpg" alt="Produit2" width="200" height="200">
+      </div>
+      <div class="column">
+        <img src="images/center.jpg" alt="Produit3" width="350" height="350">
+      </div>
+      <div class="column">
+        <img src="images/p3.jpg" alt="Produit4" width="200" height="200">
+      </div>
+      <div class="column">
+        <img src="images/p4.jpg" alt="Produit5" width="200" height="200">
+      </div>
+    </div>
     <section id="options" class="filters">
       <div id="show">
         <label for="show-select">Show:</label>
@@ -22,19 +38,16 @@
         <label for="page-select">Go to page:</label>
         <select name="page" id="page-select"> </select>
       </div>
-      <div id="filters">
+      <div>
 
         <span>You can filter products here :</span>
         <p> </p>
 
-        <div id="block1">
-        <input type="radio" id="check_reasonable_price">
-        <span>By reasonable price</span>
-        <p> </p>
-        <img src="images/fair2.png" alt="Reasonable" class="Reasonable" width="100" height="80">
-        <p> </p>
-        </div>
-        
+        <input type="checkbox" id="check_reasonable_price">
+        <!--<span>By reasonable price</span>-->
+        <input type="button" class="filt" value="Reasonable price">
+        <!--<img src="images/fair2.png" alt="Reasonable" class="Reasonable" width="100" height="80">-->
+        <!--
         <div id="block2">
         <input type="radio" id="check_recently_released">
         <span>By recently released</span>
@@ -42,46 +55,42 @@
         <img src="images/recent2.png" alt="Recent" class="Recent" width="100" height="90">
         <p> </p>
         </div>
-
-        <div id="block3">
-        <input type="radio" id="check_favorite">
-        <span>By favorite</span>
-        <p> </p>
-        <img src="images/favorite2.png" alt="Favorite" class="Favorite" width="100" height="80">
-        <p> </p>        
-        </div>
+        -->
+        <input type="checkbox" id="check_favorite">
+        <!--<span>By favorite</span>-->
+        <input type="button" class="filt" value="Favorites">
+        <!--<img src="images/favorite2.png" alt="Favorite" class="Favorite" width="100" height="80">-->
       </div>
       <div id="brand">
           <p> </p>
           <label for="brand-select">By brands:</label>
           <select name="brand" id="brand-select"></select>
+
         </div>
       <div id="sort">
         <label for="sort-select">Sort:</label>
         <select name="sort" id="sort-select">
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
+          <!--
           <option value="date-asc">Recently released</option>
           <option value="date-desc">Anciently released</option>
+          -->
         </select>
       </div>
     </section>
 
     <section id="indicators">
       <p> </p>
-      <img src="images/indicators.jpg" alt="Indicators" class="indicator" width="150" height="75">
+      <!--<img src="images/indicators.jpg" alt="Indicators" class="indicator" width="150" height="75">-->
       <h2>Indicators</h2>
-
+      <!--
       <div>
         <img src="images/stock.png" alt="Stock" class="Stock" width="50" height="40">
         <span>Number of products : </span>
         <span id="nbProducts">0</span>
       </div>
-      <div>
-        <img src="images/new.png" alt="New" class="New" width="50" height="40">
-        <span>Number of new products : </span>
-        <span id="nbNewProducts">0</span>
-      </div>
+      
       <div>
         <span>50th percentile of the prices : </span>
         <span id="p50">0</span>
@@ -94,14 +103,27 @@
         <span>95th percentile of the prices : </span>
         <span id="p95">0</span>
       </div>
+    -->
+      <!--
       <div>
         <img src="images/last.png" alt="Last" class="Last" width="50" height="40">
         <span>Last released date : </span>
         <span id="lastDate">2020-01-01</span>
       </div>
+      -->
+      <input type="button" class="ind" value="Number of products">
+      <span id="nbProducts">0</span>
+      <span>   </span>
+      <input type="button" class="ind" value="50th percentile of the prices">
+      <span id="p50">0</span>
+      <input type="button" class="ind" value="90th percentile of the prices">
+      <span id="p90">0</span>
+      <input type="button" class="ind" value="95th percentile of the prices">
+      <span id="p95">0</span>
+
     </section>
     <p> </p>
-    <img src="images/products.jpg" alt="Products" class="product" width="150" height="100">
+    <!--<img src="images/products.jpg" alt="Products" class="product" width="150" height="100">-->
     <section id="products"></section>
     <script type="text/javascript" charset="UTF-8" src="data.js"></script>
     <script type="text/javascript" charset="UTF-8" src="index.js"></script>

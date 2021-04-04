@@ -6,6 +6,7 @@ const db = require('./db');
 async function sandbox () {
   try {
     let products = [];
+    /*
     let pages = [
       'https://www.dedicatedbrand.com/en/men/basics',
       'https://www.dedicatedbrand.com/en/men/sale'
@@ -23,7 +24,7 @@ async function sandbox () {
 
       products.push(results);
     }
-
+  */
     pages = [
       'https://www.loom.fr/collections/hauts',
       'https://www.loom.fr/collections/bas'
@@ -33,7 +34,7 @@ async function sandbox () {
 
     console.log(`🕵️‍♀️  browsing ${pages.length} pages with Promise.all`);
 
-    const promises = pages.map(loom.scrape);
+    //const promises = pages.map(loom.scrape);
     const promises = pages.map(page => loom.scrape(page));
     const results = await Promise.all(promises);
 

@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const MONGODB_DB_NAME = 'clearfashion';
 const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = `mongodb+srv://parth:eQBAE1gmfxnODEmN@clearcluster.egopx.mongodb.net/${MONGODB_DB_NAME}?retryWrites=true&w=majority`;
+const MONGODB_URI = `mongodb+srv://parth:qSDKwYDnBXs6BX9s@cluster0.xk1ww.mongodb.net/${MONGODB_DB_NAME}?retryWrites=true&w=majority`;
 
 let client = null;
 let database = null;
@@ -85,6 +85,24 @@ module.exports.find = async query => {
     return null;
   }
 };
+
+
+module.exports.find2 = async (query,pages,limit) => {
+  try {
+    skips = limit * (pages - 1)
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find(query).sort({price:1}).skip(skips).limit(limit).toArray();
+    const meta=await collection.countDocuments();
+    //console.log(result)
+    return {result,meta};
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+  }
+};
+
+
 
 module.exports.findLimited = async (query,l) => {
   try {
@@ -176,6 +194,7 @@ module.exports.filteredProducts = async (limit, brand, price) => {
     return null;
   }
 };
+
 
 
 

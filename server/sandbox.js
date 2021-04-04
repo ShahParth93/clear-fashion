@@ -140,6 +140,7 @@ async function all() {
 
     console.log("Scrapping done for mudjeans");
 
+    /*
     const p2 = await dedicatedbrand.scrape_links('https://www.dedicatedbrand.com')
 
     //console.log(p2);
@@ -170,7 +171,7 @@ async function all() {
     
     console.log("Scrapping done for adresse paris");
 
-
+    */
     const result = await db.insert(allProducts);
 
     console.log(`💽  ${result.insertedCount} inserted products`);
@@ -235,4 +236,4 @@ rl.on('line', (input) => {
 });
 
 */
-testquery()
+all()

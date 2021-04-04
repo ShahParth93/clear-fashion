@@ -25,7 +25,8 @@ const parse = data => {
           .find('.product-price:first-child')
           .text()
           .replace(",00\n","")
-          .replace("Buy€","")          
+          .replace("Buy","")
+          .replace("€","")          
           )
       ;
       const lease = parseFloat($(element)
@@ -35,8 +36,15 @@ const parse = data => {
           .replace(",",".")                  
           )
       ;
+      let photo = $(element)
+        .find('.img.img--wrapper')
+        .find("img")
+        .attr("src");
 
-      return {brand,name, price,lease};
+      photo = "https:" + photo
+
+
+      return {brand,name, price,lease,photo};
     })
     .get();
 };
